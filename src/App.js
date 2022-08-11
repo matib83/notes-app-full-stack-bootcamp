@@ -31,6 +31,12 @@ const App = () => {
     }
   }, [])
 
+  const handleLogout = () => {
+    setUser(null)
+    noteService.setToken(user.token)
+    window.localStorage.removeItem('loggedNoteAppUser')
+  }
+
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -127,6 +133,7 @@ const App = () => {
   )
 
   const renderCreateNoteForm = () => (
+      <>
       <form onSubmit={addNote}>
       <input
         placeholder='Write your note content'
@@ -134,7 +141,13 @@ const App = () => {
         onChange={handleNoteChange}
       />
       <button type="submit">save</button>
-    </form> 
+    </form>
+    <div>
+      <button onClick={handleLogout}>
+        Cerrar sesión
+      </button>
+    </div> 
+    </>
   )
 
   return (
