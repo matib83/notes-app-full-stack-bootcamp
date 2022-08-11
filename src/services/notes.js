@@ -14,8 +14,15 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const create = newObject => {
-  const request = axios.post(baseUrl, newObject)
+const create = (newObject, {token}) => {
+  // Este config es de Axios, para poder mandar el token en el HEADER de la petición
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const request = axios.post(baseUrl, newObject, config)
   return request.then(response => response.data)
 }
 

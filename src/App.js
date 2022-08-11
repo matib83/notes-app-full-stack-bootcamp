@@ -26,13 +26,12 @@ const App = () => {
     event.preventDefault()
     const noteObject = {
       content: newNote,
-      date: new Date().toISOString(),
       important: Math.random() > 0.5,
-      id: notes.length + 1,
     }
+    const {token} = user
   
     noteService
-      .create(noteObject)
+      .create(noteObject, {token})
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
         setNewNote('')
@@ -129,8 +128,11 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={errorMessage} /> 
 
-      {user === null && renderLoginForm()}
-      {user !== null && renderCreateNoteForm()}
+      {
+        user
+        ? renderCreateNoteForm()
+        : renderLoginForm()
+      }
 
       <div>
        <button onClick={() => setShowAll(!showAll)}>
