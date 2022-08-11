@@ -28,10 +28,9 @@ const App = () => {
       content: newNote,
       important: Math.random() > 0.5,
     }
-    const {token} = user
   
     noteService
-      .create(noteObject, {token})
+      .create(noteObject)
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
         setNewNote('')
@@ -70,7 +69,9 @@ const App = () => {
         password
       })
 
-      console.log(user)
+      //console.log(user)
+      noteService.setToken(user.token)
+      
       setUser(user)
       setUsername('')
       setPassword('') 
