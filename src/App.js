@@ -87,36 +87,33 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
-  const renderLoginForm = () => {
-    return (
-      <form onSubmit={HandleLogin}>
-        <div>
-          <input
-            type='text'
-            value={username}
-            name='Username'
-            placeholder='Username'
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type='password'
-            value={password}
-            name='Password'
-            placeholder='Password'
-            onChange={({target}) => setPassword(target.value)}
-          />
-        </div>
-        <button>
-          Login
-        </button>
-      </form>  
-    )
-  }
+  const renderLoginForm = () => (
+    <form onSubmit={HandleLogin}>
+      <div>
+        <input
+          type='text'
+          value={username}
+          name='Username'
+          placeholder='Username'
+          onChange={(event) => setUsername(event.target.value)}
+        />
+      </div>
+      <div>
+        <input
+          type='password'
+          value={password}
+          name='Password'
+          placeholder='Password'
+          onChange={({target}) => setPassword(target.value)}
+        />
+      </div>
+      <button>
+        Login
+      </button>
+    </form>  
+  )
 
-  const renderCreateNoteForm = () => {
-    return (
+  const renderCreateNoteForm = () => (
       <form onSubmit={addNote}>
       <input
         placeholder='Write your note content'
@@ -125,19 +122,18 @@ const App = () => {
       />
       <button type="submit">save</button>
     </form> 
-    )
-  }
+  )
 
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} /> 
 
-      {renderLoginForm()}
-      {renderCreateNoteForm()}
+      {user === null && renderLoginForm()}
+      {user !== null && renderCreateNoteForm()}
 
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
+       <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all' }
         </button>
       </div>      
