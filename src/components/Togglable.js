@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default function Togglable ({mensaje}) {
-  return <h1>{mensaje}</h1>
+export default function Togglable ({children}) {
+  return <h1>{children}</h1>
 }

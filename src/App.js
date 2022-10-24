@@ -129,7 +129,9 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      <Togglable mensaje={'Hola mindo'} />
+      <Togglable>
+        Hola mundlo    
+      </Togglable>
       <Notification message={errorMessage} /> 
 
       {
