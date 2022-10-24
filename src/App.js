@@ -4,7 +4,6 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import noteService from './services/notes'
 import loginService from './services/login'
-import Togglable from './components/Togglable'
 
 const App = () => {
   const [notes, setNotes] = useState([]) 
@@ -129,9 +128,6 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      <Togglable>
-        Hola mundlo    
-      </Togglable>
       <Notification message={errorMessage} /> 
 
       {

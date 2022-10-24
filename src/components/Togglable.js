@@ -1,5 +1,21 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 export default function Togglable ({children}) {
-  return <h1>{children}</h1>
+  const [visible, setVisible] = useState(false)
+  
+  const hideWhenVisible = { display: visible ? 'none' : ''}
+  const showWhenVisible = { display: visible ? '' : 'none'}
+
+  return (
+    <div>
+      <div style={hideWhenVisible}>
+        <button onClick={() => setVisible(true)}>Show login</button>
+      </div>
+
+      <div style={showWhenVisible}>
+        {children}
+        <button onClick={() => setVisible(false)}>Cancel</button>
+      </div>
+    </div>
+  )
 }
