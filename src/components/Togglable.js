@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-export default function Togglable ({children}) {
+export default function Togglable ({children, buttonLabel}) {
   const [visible, setVisible] = useState(false)
   
   const hideWhenVisible = { display: visible ? 'none' : ''}
@@ -9,7 +9,7 @@ export default function Togglable ({children}) {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={() => setVisible(true)}>Show login</button>
+        <button onClick={() => setVisible(true)}>{buttonLabel}</button>
       </div>
 
       <div style={showWhenVisible}>
