@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 import noteService from './services/notes'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [notes, setNotes] = useState([]) 
@@ -106,32 +108,6 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
-  const renderLoginForm = () => (
-    <form onSubmit={HandleLogin}>
-      <div>
-        <input
-          type='text'
-          value={username}
-          name='Username'
-          placeholder='Username'
-          onChange={(event) => setUsername(event.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          placeholder='Password'
-          onChange={({target}) => setPassword(target.value)}
-        />
-      </div>
-      <button>
-        Login
-      </button>
-    </form>  
-  )
-
   const renderCreateNoteForm = () => (
       <>
       <form onSubmit={addNote}>
@@ -153,12 +129,21 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Togglable mensaje={'Hola mindo'} />
       <Notification message={errorMessage} /> 
 
       {
         user
         ? renderCreateNoteForm()
-        : renderLoginForm()
+        : <LoginForm 
+            username={username} 
+            password={password}
+            handleUsernameChange={
+              (event) => setUsername(event.target.value)}
+            handlePasswordChange={
+              ({target}) => setPassword(target.value)}
+            handleSubmit={HandleLogin}
+          />
       }
 
       <div>
