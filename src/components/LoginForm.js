@@ -4,7 +4,7 @@ import Togglable from './Togglable'
 export default function LoginForm ({username, password, handleUsernameChange, handlePasswordChange, handleSubmit}) {
 
   return (
-    <Togglable buttonLabel='Show login'>
+    <Togglable buttonLabel='Show Login'>
       <form onSubmit={handleSubmit}>
         <div>
           <input

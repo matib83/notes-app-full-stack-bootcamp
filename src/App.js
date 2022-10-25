@@ -4,6 +4,7 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import noteService from './services/notes'
 import loginService from './services/login'
+import NoteForm from './components/NoteForm'
 
 const App = () => {
   const [notes, setNotes] = useState([]) 
@@ -107,24 +108,6 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
-  const renderCreateNoteForm = () => (
-      <>
-      <form onSubmit={addNote}>
-      <input
-        placeholder='Write your note content'
-        value={newNote}
-        onChange={handleNoteChange}
-      />
-      <button type="submit">save</button>
-    </form>
-    <div>
-      <button onClick={handleLogout}>
-        Cerrar sesión
-      </button>
-    </div> 
-    </>
-  )
-
   return (
     <div>
       <h1>Notes</h1>
@@ -132,7 +115,12 @@ const App = () => {
 
       {
         user
-        ? renderCreateNoteForm()
+        ? <NoteForm
+            handleSummit={addNote}
+            newNote={newNote}
+            handleNoteChange={handleNoteChange}
+            handleLogout={handleLogout}
+          /> 
         : <LoginForm 
             username={username} 
             password={password}
