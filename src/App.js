@@ -8,7 +8,7 @@ import NoteForm from './components/NoteForm'
 
 const App = () => {
   const [notes, setNotes] = useState([]) 
-  const [newNote, setNewNote] = useState('')
+  
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -39,18 +39,12 @@ const App = () => {
     window.localStorage.removeItem('loggedNoteAppUser')
   }
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5,
-    }
-  
+  const addNote = (noteObject) => {
     noteService
       .create(noteObject)
       .then(returnedNote => {
+        //setNotes si lo tengo que hacer acá en App pq es donde tengo el listado de notas que tengo que actualizar
         setNotes(notes.concat(returnedNote))
-        setNewNote('')
       })
   }
 
@@ -71,10 +65,6 @@ const App = () => {
           setErrorMessage(null)
         }, 5000)   
       })
-  }
-
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
   }
 
   const HandleLogin = async (event) => {
@@ -116,9 +106,7 @@ const App = () => {
       {
         user
         ? <NoteForm
-            handleSummit={addNote}
-            newNote={newNote}
-            handleNoteChange={handleNoteChange}
+            addNote={addNote}
             handleLogout={handleLogout}
           /> 
         : <LoginForm 
