@@ -28,7 +28,7 @@ export default function NoteForm ({addNote, handleLogout}) {
 
   return (
     <Togglable buttonLabel='New Note' ref={togglableRef}>
-      <h3 ref={elementRef}>Create a new note</h3>
+      <h3 ref={elementRef}>Create a new note</h3> 
 
       <form onSubmit={handleSummit}>
         <input

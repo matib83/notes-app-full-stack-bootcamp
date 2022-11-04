@@ -1,4 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react'
+import PropTypes from 'prop-types'
 
 const Togglable = forwardRef(({children, buttonLabel}, ref) => {
   const [visible, setVisible] = useState(false)
@@ -27,5 +28,12 @@ const Togglable = forwardRef(({children, buttonLabel}, ref) => {
     </div>
   )
 })
+
+// esto sirve para que al saltar el warning siempre me indique el nombre del componente (ya que uso ForwardRef)
+Togglable.displayName = 'Togglable' 
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
+}
 
 export default Togglable
