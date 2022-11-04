@@ -1,141 +1,54 @@
-import React, { useState, useEffect } from 'react'
-import Note from './components/Note'
-import Notification from './components/Notification'
-import LoginForm from './components/LoginForm'
-import noteService from './services/notes'
-import loginService from './services/login'
-import NoteForm from './components/NoteForm'
+import React, { useState } from 'react'
+
+const Home = () => <h1>Home Page</h1>
+
+const Notes = () => <h1>Notes</h1>
+
+const Users = () => <h1>Users</h1>
+
+const inlineStyles = {
+  padding: 5
+}
 
 const App = () => {
-  const [notes, setNotes] = useState([]) 
-  
-  const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [page, setPage] = useState('home')
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    noteService
-      .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes)
-      })
-  }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      noteService.setToken(user.token)
+  const getContent = () => {
+    if (page === 'home') {
+      return <Home />
+    } else if (page === 'users') {
+      return <Users />
+    } else if (page === 'notes') {
+      return <Notes />
     }
-  }, [])
-
-  const handleLogout = () => {
-    setUser(null)
-    noteService.setToken(user.token)
-    window.localStorage.removeItem('loggedNoteAppUser')
   }
 
-  const addNote = (noteObject) => {
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        //setNotes si lo tengo que hacer acá en App pq es donde tengo el listado de notas que tengo que actualizar
-        setNotes(notes.concat(returnedNote))
-      })
-  }
-
-  const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-  
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)   
-      })
-  }
-
-  const HandleLogin = async (event) => {
+  const toPage = page => event => {
+    //Para evitar el comportamiento por defecto que tiene el ancor al ser clickeado 
+    //que es intentar navegar al la direccion indicada por href
     event.preventDefault()
-    //console.log('THIS IS SUBMIT!')
-    try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-
-      //console.log(user)
-      window.localStorage.setItem(
-        'loggedNoteAppUser', JSON.stringify(user)
-      )
-
-      noteService.setToken(user.token)
-
-      setUser(user)
-      setUsername('')
-      setPassword('') 
-    } catch(e) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
+    //history es una variable global del objeto global windows
+    window.history.pushState(null, '', `/${page}`)
+    console.log(page)
+    setPage(page)
   }
-
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important)
 
   return (
     <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} /> 
-
-      {
-        user
-        ? <NoteForm
-            addNote={addNote}
-            handleLogout={handleLogout}
-          /> 
-        : <LoginForm 
-            username={username} 
-            password={password}
-            handleUsernameChange={
-              (event) => setUsername(event.target.value)}
-            handlePasswordChange={
-              ({target}) => setPassword(target.value)}
-            handleSubmit={HandleLogin}
-          />
-      }
-
-      <div>
-       <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
-      </div>      
-      <ul>
-        {notesToShow.map((note, i) => 
-          <Note
-            key={i}
-            note={note} 
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        )}
-      </ul>
+      <header>
+        <a href='#' onClick={toPage('home')} style={inlineStyles}>
+          Home
+        </a>
+        <a href='#' onClick={toPage('notes')} style={inlineStyles}>
+          Notes
+        </a>
+        <a href='#' onClick={toPage('users')} style={inlineStyles}>
+          Users
+        </a>
+      </header>
+      {getContent()}
     </div>
   )
 }
 
-export default App 
+export default App
