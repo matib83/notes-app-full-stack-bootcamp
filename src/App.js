@@ -11,15 +11,19 @@ const inlineStyles = {
 }
 
 const App = () => {
-  const [page, setPage] = useState('home')
+  const [page, setPage] = useState(() => {
+    const {pathname} = window.location
+    const page = pathname.slice(1)  //para quitar el / inicial del pathname
+    return page
+  })
 
   const getContent = () => {
-    if (page === 'home') {
-      return <Home />
-    } else if (page === 'users') {
+    if (page === 'users') { 
       return <Users />
     } else if (page === 'notes') {
       return <Notes />
+    } else {
+      return <Home />
     }
   }
 
