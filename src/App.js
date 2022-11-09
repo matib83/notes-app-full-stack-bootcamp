@@ -29,11 +29,6 @@ const App = () => {
   }
 
   const toPage = page => event => {
-    //Para evitar el comportamiento por defecto que tiene el ancor al ser clickeado 
-    //que es intentar navegar al la direccion indicada por href
-    event.preventDefault()
-    //history es una variable global del objeto global windows
-    window.history.pushState(null, '', `/${page}`)
     console.log(page)
     setPage(page)
   }
@@ -41,13 +36,13 @@ const App = () => {
   return (
     <BrowserRouter>
       <header>
-        <Link to='#' onClick={toPage('home')} style={inlineStyles}>
+        <Link to='/home' onClick={toPage('home')} style={inlineStyles}>
           Home
         </Link>
-        <Link to='#' onClick={toPage('notes')} style={inlineStyles}>
+        <Link to='/notes' onClick={toPage('notes')} style={inlineStyles}>
           Notes
         </Link>
-        <Link to='#' onClick={toPage('users')} style={inlineStyles}>
+        <Link to='/users' onClick={toPage('users')} style={inlineStyles}>
           Users
         </Link>
       </header>
