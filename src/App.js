@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { BrowserRouter, Link } from 'react-router-dom'
 
 const Home = () => <h1>Home Page</h1>
 
@@ -38,20 +39,20 @@ const App = () => {
   }
 
   return (
-    <div>
+    <BrowserRouter>
       <header>
-        <a href='#' onClick={toPage('home')} style={inlineStyles}>
+        <Link to='#' onClick={toPage('home')} style={inlineStyles}>
           Home
-        </a>
-        <a href='#' onClick={toPage('notes')} style={inlineStyles}>
+        </Link>
+        <Link to='#' onClick={toPage('notes')} style={inlineStyles}>
           Notes
-        </a>
-        <a href='#' onClick={toPage('users')} style={inlineStyles}>
+        </Link>
+        <Link to='#' onClick={toPage('users')} style={inlineStyles}>
           Users
-        </a>
+        </Link>
       </header>
       {getContent()}
-    </div>
+    </BrowserRouter>
   )
 }
 
