@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter, Link } from 'react-router-dom'
+import { BrowserRouter, Link, Route } from 'react-router-dom'
 
 const Home = () => <h1>Home Page</h1>
 
@@ -12,41 +12,29 @@ const inlineStyles = {
 }
 
 const App = () => {
-  const [page, setPage] = useState(() => {
-    const {pathname} = window.location
-    const page = pathname.slice(1)  //para quitar el / inicial del pathname
-    return page
-  })
-
-  const getContent = () => {
-    if (page === 'users') { 
-      return <Users />
-    } else if (page === 'notes') {
-      return <Notes />
-    } else {
-      return <Home />
-    }
-  }
-
-  const toPage = page => event => {
-    console.log(page)
-    setPage(page)
-  }
-
   return (
     <BrowserRouter>
       <header>
-        <Link to='/home' onClick={toPage('home')} style={inlineStyles}>
+        <Link to='/home' style={inlineStyles}>
           Home
         </Link>
-        <Link to='/notes' onClick={toPage('notes')} style={inlineStyles}>
+        <Link to='/notes' style={inlineStyles}>
           Notes
         </Link>
-        <Link to='/users' onClick={toPage('users')} style={inlineStyles}>
+        <Link to='/users' style={inlineStyles}>
           Users
         </Link>
       </header>
-      {getContent()}
+
+      <Route path='/notes'>
+        <Notes />
+      </Route>
+      <Route path='/users'>
+        <Users />
+      </Route>
+      <Route path='/'>
+        <Home />
+      </Route>
     </BrowserRouter>
   )
 }
