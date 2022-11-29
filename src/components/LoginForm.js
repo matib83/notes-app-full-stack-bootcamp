@@ -1,26 +1,42 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
-export default function LoginForm ({username, password, handleUsernameChange, handlePasswordChange, handleSubmit}) {
+const useField = ({type}) => {
+ const [value, setValue] = useState('')
 
+ const onChange = event => {
+  setValue(event.target.value)
+ }
+
+ return {
+  type,
+  value,
+  onChange
+ }
+}
+
+export default function LoginForm ({handleSubmit}) {
+  const username = useField({ type: 'text' })
+  const password = useField({ type: 'password' })
+  
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <input
-          type='text'
-          value={username}
+          //En vez de hacer uno por uno, utilizo el spred operator
+          //type={username.type}
+          //value={username.value}
+          //onChange={username.onChange}
+          {... username}
           name='Username'
           placeholder='Username'
-          onChange={handleUsernameChange}
         />
       </div>
       <div>
         <input
-          type='password'
-          value={password}
+          {... password}
           name='Password'
           placeholder='Password'
-          onChange={handlePasswordChange}
         />
       </div>
       <button>

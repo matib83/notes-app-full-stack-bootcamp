@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
-import Login from './Login'
 import { NoteDetail } from './components/NoteDetail'
 import Notes from './Notes'
-import noteService from './services/notes'
+import Login from './Login'
+import { useUser } from './hooks/useUser'
+import { useNotes } from './hooks/useNotes'
 
 const Home = () => <h1>Home Page</h1>
 
@@ -14,26 +15,11 @@ const inlineStyles = {
 }
 
 const App = () => {
-  const [notes, setNotes] = useState([])
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    noteService
-      .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes)
-      })
-  }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
-  }, [])
-
+  const {user} = useUser()
+  const {notes} = useNotes()
+  
+  //const match = useRouteMatch('/notes/:id')
+  
   return (
     <BrowserRouter>
       <header>
@@ -44,12 +30,11 @@ const App = () => {
           user 
             ? <em>Logged as {user.name}</em>
             : <Link to='/login' style={inlineStyles}>Login</Link>
-        }
-        
+        }   
       </header>
 
       <Routes>
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login />}        />
         <Route path='/notes/:noteId' element={<NoteDetail notes={notes}/>} />
         <Route path='/notes' element={<Notes />} />
         <Route path='/users' element={<Users />} />

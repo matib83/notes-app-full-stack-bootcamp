@@ -1,56 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
-import LoginForm from './components/LoginForm'
-import noteService from './services/notes'
-import loginService from './services/login'
-import NoteForm from './components/NoteForm'
+import LoginForm from './components/LoginForm.js'
+import NoteForm from './components/NoteForm.js'
+import { useNotes } from './hooks/useNotes.js'
+import { useUser } from './hooks/useUser.js'
 
-const App = () => {
-  const [notes, setNotes] = useState([]) 
+const Notes = () => {
+  const {notes, addNote, toggleImportanceOf} = useNotes()
+  const {user, login, logout} = useUser()
   
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    noteService
-      .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes)
-      })
-  }, [])
 
   const handleLogout = () => {
-    setUser(null)
-    noteService.setToken(user.token)
-    window.localStorage.removeItem('loggedNoteAppUser')
+    logout()
   }
 
-  const addNote = (noteObject) => {
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        //setNotes si lo tengo que hacer acá en App pq es donde tengo el listado de notas que tengo que actualizar
-        setNotes(notes.concat(returnedNote))
-      })
-  }
-
-  const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-  
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
+  const toggleImportanceOfNote = (id) => {
+    toggleImportanceOf(id)  // el que viene del custom hook
+      .catch(() => {
         setErrorMessage(
-          `Note '${note.content}' was already removed from server`
+          `Note was already removed from server`
         )
         setTimeout(() => {
           setErrorMessage(null)
@@ -62,19 +36,7 @@ const App = () => {
     event.preventDefault()
     //console.log('THIS IS SUBMIT!')
     try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-
-      //console.log(user)
-      window.localStorage.setItem(
-        'loggedNoteAppUser', JSON.stringify(user)
-      )
-
-      noteService.setToken(user.token)
-
-      setUser(user)
+      login({username, password})
       setUsername('')
       setPassword('') 
     } catch(e) {
@@ -96,19 +58,19 @@ const App = () => {
 
       {
         user
-        ? <NoteForm
+        ?  <NoteForm
             addNote={addNote}
             handleLogout={handleLogout}
-          /> 
-        : <LoginForm 
-            username={username} 
-            password={password}
-            handleUsernameChange={
-              (event) => setUsername(event.target.value)}
-            handlePasswordChange={
-              ({target}) => setPassword(target.value)}
-            handleSubmit={HandleLogin}
           />
+        : <LoginForm 
+          username={username} 
+          password={password}
+          handleUsernameChange={
+            (event) => setUsername(event.target.value)}
+          handlePasswordChange={
+            ({target}) => setPassword(target.value)}
+          handleSubmit={HandleLogin}
+      />
       }
 
       <div>
@@ -121,7 +83,7 @@ const App = () => {
           <Note
             key={i}
             note={note} 
-            toggleImportance={() => toggleImportanceOf(note.id)}
+            toggleImportance={() => toggleImportanceOfNote(note.id)}
           />
         )}
       </ul>
@@ -129,4 +91,4 @@ const App = () => {
   )
 }
 
-export default App 
+export default Notes 
